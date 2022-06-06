@@ -67,4 +67,6 @@ class ForgetPasswordSerializer(serializers.Serializer):
             CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError('email doesnt exist')
+
         return attrs
+
