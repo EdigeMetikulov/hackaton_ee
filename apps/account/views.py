@@ -66,4 +66,7 @@ class LogoutAPIView(APIView):
         token = Token.objects.get(user=user)
         token.delete()
         # return HttpResponseRedirect('product')
+
+
         return Response('logout', status=status.HTTP_401_UNAUTHORIZED)
+
