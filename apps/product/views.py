@@ -7,20 +7,19 @@ from rest_framework.response import Response
 from rest_framework import generics, filters
 from django.db.models import Q
 
-from .models import Product, LikeProduct, Review
+from .models import Product, LikeProduct, Review, ProductImage
 from .permissions import IsAuthorOrAdminPermission
-from .serializers import ProductSerializer, LikeProductSerializer, ReviewSerializer
+from .serializers import ProductSerializer, LikeProductSerializer, ReviewSerializer, ProductImageSerializer
 from .paginations import ProductPagination
 
 
 class ListCreateProductView(generics.ListCreateAPIView):
-
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = ProductPagination
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['is_published','price','category']
+    filterset_fields = ['is_published', 'price', 'category']
     search_fields = ['title', 'price']
 
     def get_serializer_context(self):
@@ -66,7 +65,6 @@ class LikeProductView(APIView):
 
 
 class ReviewViewSet(viewsets.ModelViewSet):
-
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
@@ -75,23 +73,10 @@ class ReviewViewSet(viewsets.ModelViewSet):
             return []
         if self.action == 'create':
             return [IsAuthenticated()]
-        #update, partial_udate, destroy
+        # update, partial_update, destroy
         return [IsAuthorOrAdminPermission()]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+class ProductImageView(viewsets.ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer

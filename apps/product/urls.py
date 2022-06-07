@@ -3,10 +3,12 @@ from rest_framework.routers import SimpleRouter
 
 from .views import (ListCreateProductView, GetProductView,
                     UpdateProductView, DestroyProductView,
-                    LikeProductView, ReviewViewSet)
+                    LikeProductView, ReviewViewSet, ProductImageView, )
 
 router = SimpleRouter()
 router.register('reviews', ReviewViewSet)
+router.register('product_images', ProductImageView)
+
 
 urlpatterns = [
     path('list_or_create/', ListCreateProductView.as_view()),
@@ -15,4 +17,5 @@ urlpatterns = [
     path('update/<int:pk>/', UpdateProductView.as_view()),
     path('<int:pk>/like/', LikeProductView.as_view()),
     path('', include(router.urls)),
+
 ]

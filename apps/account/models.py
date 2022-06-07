@@ -3,7 +3,7 @@ from django.contrib.auth.hashers import make_password  # hash
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db.models.signals import post_save
 
-
+from apps.account.services.signals import post_create_cart_signal
 
 
 class CustomUserManager(UserManager):
