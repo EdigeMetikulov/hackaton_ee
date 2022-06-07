@@ -76,5 +76,3 @@ class CustomUser(AbstractUser):
 
 
 post_save.connect(post_create_cart_signal, CustomUser)
-# post_save.connect(post_create_cart_signal, CustomUser)
-
