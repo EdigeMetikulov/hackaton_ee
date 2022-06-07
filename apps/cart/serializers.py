@@ -16,7 +16,6 @@ class CartItemSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         rep = super().to_representation(instance)
-        print(instance)
         if instance.product:
             rep['product'] = instance.product.title
         # rep["id_product"] = instance.pk
@@ -25,7 +24,6 @@ class CartItemSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         cart = self.context.get('request').user.cart
         product = validated_data.get('product')
-        print(product.title)
         quantity = validated_data.get('quantity')
         return CartItem.objects.create(cart_shopping=cart, product=product, quantity=quantity)
 

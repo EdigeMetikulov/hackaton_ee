@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status, viewsets
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
@@ -7,9 +8,11 @@ from rest_framework.response import Response
 from rest_framework import generics, filters
 from django.db.models import Q
 
-from .models import Product, LikeProduct, Review
+from .models import Product, LikeProduct, Review, FavProduct
 from .permissions import IsAuthorOrAdminPermission
-from .serializers import ProductSerializer, LikeProductSerializer, ReviewSerializer
+from .serializers import (ProductSerializer, LikeProductSerializer,
+                          ReviewSerializer, ProductDetailSerializer,
+                          FavouriteSerializer)
 from .paginations import ProductPagination
 
 
@@ -33,7 +36,7 @@ class GetProductView(APIView):
         product = get_object_or_404(Product, pk=pk)
         product.watch += 1
         product.save()
-        serializer = ProductSerializer(product)
+        serializer = ProductDetailSerializer(product)
         return Response(serializer.data)
 
 
@@ -48,6 +51,7 @@ class UpdateProductView(generics.UpdateAPIView):
 
 
 class LikeProductView(APIView):
+
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, pk):
@@ -79,19 +83,34 @@ class ReviewViewSet(viewsets.ModelViewSet):
         return [IsAuthorOrAdminPermission()]
 
 
+class FavouriteListView(ListAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = FavouriteSerializer
+    permission_classes = [IsAuthenticated, ]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(favourites__user=self.request.user, favourites__favs=True)
+        return queryset
 
 
+class FavouriteProductView(APIView):
 
+    permission_classes = [IsAuthenticated, ]
 
+    def get(self, request, pk):
+        user = request.user
+        product = get_object_or_404(Product, pk=pk)
+        fav, create = FavProduct.objects.get_or_create(user=user, product=product)
+        if fav.favs == False:
+            fav.favs = not fav.favs
+            fav.save()
+            return Response('This product was added to favourites')
+        else:
+            fav.favs = not fav.favs
+            fav.save()
+            return Response('This product was removed from favourites')
 
-
-
-
-
-
-
-
-
-
-
-
+        serializer = FavouriteSerializer(fav)
+        return Response(serializer.data)
