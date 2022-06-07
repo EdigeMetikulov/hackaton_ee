@@ -4,7 +4,6 @@ from .models import CartItem, ShoppingCart
 
 
 class CartItemSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CartItem
         fields = ('id', 'product', 'quantity')
@@ -18,7 +17,7 @@ class CartItemSerializer(serializers.ModelSerializer):
         rep = super().to_representation(instance)
         if instance.product:
             rep['product'] = instance.product.title
-        # rep["id_product"] = instance.pk
+            rep['total_price'] = instance.get_total_price_item()
         return rep
 
     def create(self, validated_data):
@@ -36,4 +35,8 @@ class CartSerializer(serializers.ModelSerializer):
     def to_representation(self, instance: ShoppingCart):
         rep = super().to_representation(instance)
         rep['products'] = CartItemSerializer(instance.cart_item.all(), many=True).data
+        rep['products'] = CartItemSerializer(instance.cart_item.all(), many=True).data
+        rep['total_price'] = instance.get_total_price_all()
+        rep['user'] = instance.user.email
+
         return rep

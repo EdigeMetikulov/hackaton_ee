@@ -4,7 +4,6 @@ from django.conf import settings
 
 
 class Product(models.Model):
-
     title = models.CharField(max_length=150)
     desc = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
@@ -23,6 +22,11 @@ class Product(models.Model):
         ordering = ['title']
 
 
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='products/', blank=True, null=True)
+
+
 class Review(models.Model):
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reviews')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
@@ -31,14 +35,13 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('-created_at', )
+        ordering = ('-created_at',)
 
     def __str__(self):
         return self.author.email
 
 
 class LikeProduct(models.Model):
-
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='likes')
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='likes')
     is_like = models.BooleanField(default=True)

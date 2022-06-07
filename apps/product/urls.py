@@ -4,10 +4,14 @@ from rest_framework.routers import SimpleRouter
 from .views import (ListCreateProductView, GetProductView,
                     UpdateProductView, DestroyProductView,
                     LikeProductView, ReviewViewSet,
-                    FavouriteProductView, FavouriteListView)
+                    FavouriteProductView, FavouriteListView,
+                    ProductImageView)
+
 
 router = SimpleRouter()
 router.register('reviews', ReviewViewSet)
+router.register('product_images', ProductImageView)
+
 
 urlpatterns = [
     path('list_or_create/', ListCreateProductView.as_view()),
