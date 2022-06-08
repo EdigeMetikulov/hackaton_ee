@@ -94,7 +94,7 @@ class FavouriteListView(ListAPIView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(favourites__user=self.request.user, favourites__favs=True)
+        queryset = queryset.filter(favourites__user=self.request.user, favourites__is_fav=True)
         return queryset
 
 
@@ -106,14 +106,14 @@ class FavouriteProductView(APIView):
         user = request.user
         product = get_object_or_404(Product, pk=pk)
         fav, create = FavProduct.objects.get_or_create(user=user, product=product)
-        if fav.favs == False:
-            fav.favs = not fav.favs
+        if not fav.is_fav:
+            fav.is_fav = not fav.is_fav
             fav.save()
             return Response('This product was added to favourites')
         else:
-            fav.favs = not fav.favs
+            fav.is_fav = not fav.is_fav
             fav.save()
             return Response('This product was removed from favourites')
 
-        serializer = FavouriteSerializer(fav)
-        return Response(serializer.data)
+        # serializer = FavouriteSerializer(fav)
+        # return Response(serializer.data)

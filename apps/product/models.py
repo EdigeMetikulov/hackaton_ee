@@ -51,4 +51,4 @@ class FavProduct(models.Model):
 
     user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='favourites')
     product = models.ForeignKey(to=Product, on_delete=models.CASCADE, related_name='favourites')
-    favs = models.BooleanField(default=False)
+    is_fav = models.BooleanField(default=False)
