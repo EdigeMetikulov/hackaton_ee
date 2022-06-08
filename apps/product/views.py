@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework import generics, filters
 from django.db.models import Q
 
-from .models import Product, LikeProduct, Review, FavProduct
+from .models import Product, LikeProduct, Review, FavProduct, ProductImage
 from .permissions import IsAuthorOrAdminPermission
 from .serializers import (ProductSerializer, LikeProductSerializer,
                           ReviewSerializer, ProductDetailSerializer,
