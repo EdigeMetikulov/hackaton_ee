@@ -20,6 +20,6 @@ urlpatterns = [
     path('update/<int:pk>/', UpdateProductView.as_view()),
     path('<int:pk>/like/', LikeProductView.as_view()),
     path('favourites/', FavouriteListView.as_view()),
-    path('<int:pk>/favourites/', FavouriteProductView.as_view()),
+    path('<int:pk>/favourite/', FavouriteProductView.as_view()),
     path('', include(router.urls)),
 ]

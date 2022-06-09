@@ -9,7 +9,7 @@ class Order(models.Model):
         ("card", "Оплата картой"),
         ("debt", "В долг")
     )
-    shopping_cart = models.ForeignKey(to=ShoppingCart, on_delete=models.PROTECT, related_name='order')
+    shopping_cart = models.ForeignKey(to=ShoppingCart, on_delete=models.CASCADE, related_name='order')
     phone_number = models.CharField(max_length=13)
     address = models.TextField()
     email = models.EmailField()
